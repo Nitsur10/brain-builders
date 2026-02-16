@@ -3,6 +3,7 @@ import QuestionSession from './components/QuestionSession';
 import CardPack from './components/CardPack';
 import CollectionBook from './components/CollectionBook';
 import CollectionStore from './logic/collectionStore';
+import PinEntry from './components/PinEntry';
 import './styles/design-system.css';
 import ParentDashboard from './components/ParentDashboard';
 import QuestionAgent from './agents/QuestionAgent';
@@ -10,19 +11,42 @@ import QuestionAgent from './agents/QuestionAgent';
 function App() {
   const [view, setView] = useState('home');
   const [earnedCard, setEarnedCard] = useState(null);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [showParentPin, setShowParentPin] = useState(false);
 
   // Calculate days until NAPLAN
   const naplanDate = new Date('2026-03-11');
   const today = new Date();
   const daysUntilNaplan = Math.ceil((naplanDate - today) / (1000 * 60 * 60 * 24));
 
+  // Check if already unlocked this session
+  useEffect(() => {
+    const unlocked = sessionStorage.getItem('brain_builders_unlocked');
+    if (unlocked === 'true') {
+      setIsUnlocked(true);
+    }
+  }, []);
+
+  const handleUnlock = () => {
+    setIsUnlocked(true);
+    sessionStorage.setItem('brain_builders_unlocked', 'true');
+  };
+
+  const handleParentAccess = () => {
+    setShowParentPin(true);
+  };
+
+  const handleParentUnlock = () => {
+    setShowParentPin(false);
+    setView('parent');
+  };
+
   const startPractice = () => {
-    QuestionAgent.setYear(5); // Year 5 NAPLAN
+    QuestionAgent.setYear(5);
     setView('practice');
   };
 
   const finishPractice = () => {
-    // Draw a card as reward
     const card = CollectionStore.drawCard();
     setEarnedCard(card);
     setView('rewards');
@@ -30,8 +54,38 @@ function App() {
 
   const goHome = () => {
     setEarnedCard(null);
+    setShowParentPin(false);
     setView('home');
   };
+
+  // Show student PIN entry if not unlocked
+  if (!isUnlocked) {
+    return <PinEntry onSuccess={handleUnlock} isParent={false} />;
+  }
+
+  // Show parent PIN entry if trying to access dashboard
+  if (showParentPin) {
+    return (
+      <div>
+        <button 
+          onClick={() => setShowParentPin(false)}
+          style={{
+            position: 'absolute',
+            top: '1rem',
+            left: '1rem',
+            background: 'none',
+            border: 'none',
+            color: 'var(--brain-pink)',
+            cursor: 'pointer',
+            fontSize: '1rem'
+          }}
+        >
+          ← Back
+        </button>
+        <PinEntry onSuccess={handleParentUnlock} isParent={true} />
+      </div>
+    );
+  }
 
   return (
     <div className="app-container" style={{
@@ -75,7 +129,7 @@ function App() {
               {daysUntilNaplan} days until NAPLAN!
             </span>
           )}
-          <button onClick={() => setView('parent')} style={{
+          <button onClick={handleParentAccess} style={{
             padding: '0.5rem 1.5rem',
             borderRadius: '20px',
             border: '2px solid #eee',
