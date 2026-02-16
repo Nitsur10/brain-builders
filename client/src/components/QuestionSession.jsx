@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QuestionAgent from '../agents/QuestionAgent';
 import CoachingAgent from '../agents/CoachingAgent';
 import BrainMascot from './BrainMascot';
+import { useProgress } from '../hooks/useProgress';
 import '../styles/design-system.css';
 
 // Subject icons
@@ -22,9 +23,13 @@ const QuestionSession = ({ onComplete, onExit }) => {
     const [correctAnswers, setCorrectAnswers] = useState(0);
     const [showExplanation, setShowExplanation] = useState(false);
     
-    const DAILY_GOAL_QUESTIONS = 15; // Complete 15 questions for reward
+    const { startSession, saveAnswer, endSession } = useProgress();
+    const DAILY_GOAL_QUESTIONS = 15;
 
     useEffect(() => {
+        // Start session in Supabase
+        startSession();
+        
         QuestionAgent.reset();
         setCurrentQuestion(QuestionAgent.getNextQuestion());
         setFeedback(CoachingAgent.getFeedback(null));
@@ -44,12 +49,15 @@ const QuestionSession = ({ onComplete, onExit }) => {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const handleAnswer = (option) => {
+    const handleAnswer = async (option) => {
         if (selectedOption) return;
 
         setSelectedOption(option);
         const isCorrect = option === currentQuestion.correctAnswer;
         const result = { isCorrect, subject: currentQuestion.subject };
+
+        // Save to Supabase
+        await saveAnswer(currentQuestion, isCorrect);
 
         setQuestionsAnswered(prev => prev + 1);
         if (isCorrect) setCorrectAnswers(prev => prev + 1);
@@ -61,9 +69,10 @@ const QuestionSession = ({ onComplete, onExit }) => {
         setMascotState(isCorrect ? 'celebrate' : 'wrong');
         setShowExplanation(true);
 
-        // Wait for user to see explanation
-        setTimeout(() => {
+        setTimeout(async () => {
             if (questionsAnswered + 1 >= DAILY_GOAL_QUESTIONS) {
+                // End session and save final stats
+                await endSession(questionsAnswered + 1, correctAnswers + (isCorrect ? 1 : 0));
                 onComplete();
             } else {
                 setCurrentQuestion(QuestionAgent.getNextQuestion(result));
@@ -72,6 +81,15 @@ const QuestionSession = ({ onComplete, onExit }) => {
                 setShowExplanation(false);
             }
         }, 3500);
+    };
+
+    const handleExit = async () => {
+        // Save progress even on early exit
+        if (questionsAnswered > 0) {
+            await endSession(questionsAnswered, correctAnswers);
+        }
+        if (onExit) onExit();
+        else onComplete();
     };
 
     if (!currentQuestion) return <div style={{ textAlign: 'center', padding: '3rem' }}>Loading...</div>;
@@ -251,7 +269,7 @@ const QuestionSession = ({ onComplete, onExit }) => {
             {/* Exit button */}
             <div style={{ textAlign: 'center', marginTop: '2rem' }}>
                 <button
-                    onClick={onExit || onComplete}
+                    onClick={handleExit}
                     style={{
                         background: 'none',
                         border: 'none',
