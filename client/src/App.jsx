@@ -13,13 +13,21 @@ function App() {
   const [earnedCard, setEarnedCard] = useState(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showParentPin, setShowParentPin] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
   // Calculate days until NAPLAN
   const naplanDate = new Date('2026-03-11');
   const today = new Date();
   const daysUntilNaplan = Math.ceil((naplanDate - today) / (1000 * 60 * 60 * 24));
 
-  // Check if already unlocked this session
+  // NAPLAN Schedule
+  const naplanSchedule = [
+    { date: 'Wed 11 Mar', subject: 'Writing', emoji: '✍️', color: '#e8d4f8' },
+    { date: 'Thu 12 Mar', subject: 'Reading', emoji: '📖', color: '#d4e8f8' },
+    { date: 'Fri 13 Mar', subject: 'Language Conventions', emoji: '📝', color: '#d4f8e8' },
+    { date: 'Mon 16 Mar', subject: 'Numeracy', emoji: '🔢', color: '#f8e8d4' }
+  ];
+
   useEffect(() => {
     const unlocked = sessionStorage.getItem('brain_builders_unlocked');
     if (unlocked === 'true') {
@@ -41,8 +49,12 @@ function App() {
     setView('parent');
   };
 
-  const startPractice = () => {
+  const startPractice = (subject = null) => {
     QuestionAgent.setYear(5);
+    if (subject) {
+      QuestionAgent.setSubject(subject);
+    }
+    setSelectedSubject(subject);
     setView('practice');
   };
 
@@ -55,15 +67,14 @@ function App() {
   const goHome = () => {
     setEarnedCard(null);
     setShowParentPin(false);
+    setSelectedSubject(null);
     setView('home');
   };
 
-  // Show student PIN entry if not unlocked
   if (!isUnlocked) {
     return <PinEntry onSuccess={handleUnlock} isParent={false} />;
   }
 
-  // Show parent PIN entry if trying to access dashboard
   if (showParentPin) {
     return (
       <div>
@@ -100,7 +111,9 @@ function App() {
         justifyContent: 'space-between',
         alignItems: 'center',
         boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-        borderBottom: '3px solid var(--brain-pink)'
+        borderBottom: '3px solid var(--brain-pink)',
+        flexWrap: 'wrap',
+        gap: '1rem'
       }}>
         <h1 
           style={{ 
@@ -109,14 +122,15 @@ function App() {
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem'
+            gap: '0.5rem',
+            fontSize: '1.5rem'
           }} 
           onClick={goHome}
         >
-          <span style={{ fontSize: '2rem' }}>🧠</span>
+          <span style={{ fontSize: '1.8rem' }}>🧠</span>
           Brain Builders
         </h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           {daysUntilNaplan > 0 && (
             <span style={{
               background: daysUntilNaplan <= 7 ? '#ff6b6b' : 'var(--accent-gold)',
@@ -124,88 +138,106 @@ function App() {
               padding: '0.4rem 1rem',
               borderRadius: '20px',
               fontWeight: 'bold',
-              fontSize: '0.9rem'
+              fontSize: '0.85rem'
             }}>
-              {daysUntilNaplan} days until NAPLAN!
+              {daysUntilNaplan} days to NAPLAN!
             </span>
           )}
           <button onClick={handleParentAccess} style={{
-            padding: '0.5rem 1.5rem',
+            padding: '0.5rem 1rem',
             borderRadius: '20px',
             border: '2px solid #eee',
             background: 'white',
             color: '#666',
             cursor: 'pointer',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            fontSize: '0.9rem'
           }}>
             Parents 🛡️
           </button>
           <button onClick={() => setView('collection')} style={{
-            padding: '0.5rem 1.5rem',
+            padding: '0.5rem 1rem',
             borderRadius: '20px',
             border: 'none',
             background: 'var(--brain-pink)',
             color: 'white',
             cursor: 'pointer',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            fontSize: '0.9rem'
           }}>
             My Cards ✨
           </button>
         </div>
       </nav>
 
-      <main style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <main style={{ padding: '1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
         
         {/* HOME VIEW */}
         {view === 'home' && (
-          <div style={{ textAlign: 'center', paddingTop: '5vh' }}>
-            {/* NAPLAN Countdown Card */}
+          <div style={{ textAlign: 'center' }}>
+            {/* Welcome Card */}
             <div style={{
               background: 'white',
               borderRadius: '24px',
-              padding: '2.5rem',
-              maxWidth: '600px',
-              margin: '0 auto 2rem',
-              boxShadow: '0 10px 40px rgba(233, 137, 151, 0.2)'
+              padding: '2rem',
+              maxWidth: '700px',
+              margin: '0 auto 1.5rem',
+              boxShadow: '0 10px 40px rgba(233, 137, 151, 0.15)'
             }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🧠💪</div>
-              <h2 style={{ fontSize: '2.2rem', marginBottom: '0.5rem', color: '#333' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🧠💪</div>
+              <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#333' }}>
                 Hi Praptini! 👋
               </h2>
-              <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '1.5rem' }}>
-                Let's build your brain for NAPLAN!
+              <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '1.5rem' }}>
+                Choose a subject to practice for NAPLAN!
               </p>
 
-              {/* Test Schedule */}
-              <div style={{
-                background: '#f8f9fa',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                marginBottom: '2rem'
+              {/* Subject Selection Grid */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(2, 1fr)', 
+                gap: '1rem',
+                marginBottom: '1.5rem'
               }}>
-                <h3 style={{ margin: '0 0 1rem', color: 'var(--brain-pink)' }}>📅 Your NAPLAN Schedule</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.8rem', fontSize: '0.95rem' }}>
-                  <div style={{ padding: '0.8rem', background: 'white', borderRadius: '8px', border: '2px solid #e8d4f8' }}>
-                    <strong>Wed 11 Mar</strong><br/>✍️ Writing
-                  </div>
-                  <div style={{ padding: '0.8rem', background: 'white', borderRadius: '8px', border: '2px solid #d4e8f8' }}>
-                    <strong>Thu 12 Mar</strong><br/>📖 Reading
-                  </div>
-                  <div style={{ padding: '0.8rem', background: 'white', borderRadius: '8px', border: '2px solid #d4f8e8' }}>
-                    <strong>Fri 13 Mar</strong><br/>📝 Language
-                  </div>
-                  <div style={{ padding: '0.8rem', background: 'white', borderRadius: '8px', border: '2px solid #f8e8d4' }}>
-                    <strong>Mon 16 Mar</strong><br/>🔢 Numeracy
-                  </div>
-                </div>
+                {naplanSchedule.map((item, i) => (
+                  <button
+                    key={i}
+                    onClick={() => startPractice(item.subject)}
+                    style={{
+                      padding: '1.5rem 1rem',
+                      background: `linear-gradient(135deg, ${item.color} 0%, white 100%)`,
+                      borderRadius: '16px',
+                      border: '2px solid transparent',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      textAlign: 'center'
+                    }}
+                    onMouseOver={e => {
+                      e.currentTarget.style.transform = 'translateY(-3px)';
+                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
+                    }}
+                    onMouseOut={e => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{item.emoji}</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#333' }}>
+                      {item.subject === 'Language Conventions' ? 'Language' : item.subject}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>
+                      {item.date}
+                    </div>
+                  </button>
+                ))}
               </div>
 
-              {/* Start Button */}
+              {/* Mixed Practice Button */}
               <button
-                onClick={startPractice}
+                onClick={() => startPractice(null)}
                 style={{
-                  padding: '1.2rem 3rem',
-                  fontSize: '1.5rem',
+                  padding: '1rem 2.5rem',
+                  fontSize: '1.2rem',
                   borderRadius: '30px',
                   border: 'none',
                   background: 'linear-gradient(135deg, var(--brain-pink) 0%, #ff6b9d 100%)',
@@ -224,15 +256,15 @@ function App() {
                   e.currentTarget.style.boxShadow = '0 6px 20px rgba(233, 137, 151, 0.4)';
                 }}
               >
-                🚀 START PRACTICE
+                🎲 Mixed Practice
               </button>
               
-              <p style={{ marginTop: '1rem', color: '#999', fontSize: '0.9rem' }}>
-                Complete your daily practice to earn mystery cards!
+              <p style={{ marginTop: '1rem', color: '#999', fontSize: '0.85rem' }}>
+                Complete 15 questions to earn a mystery card!
               </p>
             </div>
 
-            {/* Motivational message */}
+            {/* Goal Banner */}
             <div style={{
               background: 'linear-gradient(135deg, var(--accent-gold) 0%, #ffc107 100%)',
               color: 'white',
@@ -242,30 +274,34 @@ function App() {
               margin: '0 auto',
               fontWeight: '500'
             }}>
-              🎯 Goal: <strong>Band 8</strong> — You can do this!
+              🎯 Goal: <strong>Band 8</strong> — You've got this!
             </div>
           </div>
         )}
 
         {/* PRACTICE VIEW */}
         {view === 'practice' && (
-          <QuestionSession onComplete={finishPractice} onExit={goHome} />
+          <QuestionSession 
+            onComplete={finishPractice} 
+            onExit={goHome}
+            focusSubject={selectedSubject}
+          />
         )}
 
         {/* REWARDS VIEW */}
         {view === 'rewards' && (
-          <div style={{ textAlign: 'center', paddingTop: '5vh' }}>
+          <div style={{ textAlign: 'center', paddingTop: '3vh' }}>
             <div style={{
               background: 'white',
               borderRadius: '24px',
-              padding: '3rem',
+              padding: '2.5rem',
               maxWidth: '500px',
               margin: '0 auto',
               boxShadow: '0 10px 40px rgba(233, 137, 151, 0.2)'
             }}>
-              <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>🎉 Amazing Work!</h2>
+              <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>🎉 Amazing Work!</h2>
               <p style={{ color: '#666', marginBottom: '2rem' }}>
-                You've completed your daily practice! Here's your reward...
+                You've completed your practice! Here's your reward...
               </p>
               
               <CardPack 
@@ -293,7 +329,7 @@ function App() {
                   fontSize: '1rem'
                 }}
               >
-                ← Back to Home
+                ← Practice More
               </button>
             </div>
           </div>

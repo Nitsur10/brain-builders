@@ -13,7 +13,7 @@ const subjectIcons = {
     'Writing': '✍️'
 };
 
-const QuestionSession = ({ onComplete, onExit }) => {
+const QuestionSession = ({ onComplete, onExit, focusSubject = null }) => {
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [selectedOption, setSelectedOption] = useState(null);
     const [feedback, setFeedback] = useState("");
@@ -31,6 +31,9 @@ const QuestionSession = ({ onComplete, onExit }) => {
         startSession();
         
         QuestionAgent.reset();
+        if (focusSubject) {
+            QuestionAgent.setSubject(focusSubject);
+        }
         setCurrentQuestion(QuestionAgent.getNextQuestion());
         setFeedback(CoachingAgent.getFeedback(null));
 
@@ -39,7 +42,7 @@ const QuestionSession = ({ onComplete, onExit }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [focusSubject]);
 
     const progress = Math.min((questionsAnswered / DAILY_GOAL_QUESTIONS) * 100, 100);
 

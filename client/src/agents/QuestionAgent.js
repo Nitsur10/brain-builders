@@ -8,10 +8,19 @@ class QuestionAgent {
         this.currentSubjectIndex = 0;
         this.currentYear = 5; // Year 5 for NAPLAN
         this.askedQuestionIds = new Set(); // Track asked questions to avoid repeats
+        this.focusSubject = null; // If set, only ask questions from this subject
     }
 
     setYear(year) {
         this.currentYear = parseInt(year);
+    }
+
+    setSubject(subject) {
+        this.focusSubject = subject;
+        if (subject) {
+            this.currentSubjectIndex = this.subjects.indexOf(subject);
+            if (this.currentSubjectIndex === -1) this.currentSubjectIndex = 0;
+        }
     }
 
     reset() {
@@ -19,6 +28,7 @@ class QuestionAgent {
         this.currentDifficulty = 1;
         this.currentSubjectIndex = 0;
         this.askedQuestionIds.clear();
+        this.focusSubject = null;
     }
 
     getNextQuestion(lastResult = null) {
@@ -27,9 +37,15 @@ class QuestionAgent {
             this.adjustDifficulty(lastResult.isCorrect);
         }
 
-        // Switch subject to keep it fresh
-        this.currentSubjectIndex = (this.currentSubjectIndex + 1) % this.subjects.length;
-        const subject = this.subjects[this.currentSubjectIndex];
+        // If focusing on one subject, use that; otherwise rotate
+        let subject;
+        if (this.focusSubject) {
+            subject = this.focusSubject;
+        } else {
+            // Switch subject to keep it fresh
+            this.currentSubjectIndex = (this.currentSubjectIndex + 1) % this.subjects.length;
+            subject = this.subjects[this.currentSubjectIndex];
+        }
 
         // Filter by subject, year, and difficulty - exclude already asked questions
         let available = naplanQuestions.filter(q =>
