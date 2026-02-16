@@ -48,7 +48,7 @@ export function useProgress() {
   };
 
   // End session with stats
-  const endSession = async (totalQuestions, correctAnswers) => {
+  const endSession = async (totalQuestions, correctAnswers, durationSeconds = 0) => {
     if (!sessionId) return;
     
     try {
@@ -56,7 +56,8 @@ export function useProgress() {
         .from('practice_sessions')
         .update({
           total_questions: totalQuestions,
-          correct_answers: correctAnswers
+          correct_answers: correctAnswers,
+          duration_seconds: durationSeconds
         })
         .eq('id', sessionId);
       

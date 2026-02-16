@@ -71,8 +71,8 @@ const QuestionSession = ({ onComplete, onExit }) => {
 
         setTimeout(async () => {
             if (questionsAnswered + 1 >= DAILY_GOAL_QUESTIONS) {
-                // End session and save final stats
-                await endSession(questionsAnswered + 1, correctAnswers + (isCorrect ? 1 : 0));
+                // End session and save final stats including duration
+                await endSession(questionsAnswered + 1, correctAnswers + (isCorrect ? 1 : 0), secondsSpent);
                 onComplete();
             } else {
                 setCurrentQuestion(QuestionAgent.getNextQuestion(result));
@@ -86,7 +86,7 @@ const QuestionSession = ({ onComplete, onExit }) => {
     const handleExit = async () => {
         // Save progress even on early exit
         if (questionsAnswered > 0) {
-            await endSession(questionsAnswered, correctAnswers);
+            await endSession(questionsAnswered, correctAnswers, secondsSpent);
         }
         if (onExit) onExit();
         else onComplete();
