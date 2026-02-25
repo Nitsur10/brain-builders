@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Builders - Question System Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 2rem;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #e98997;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        h2 {
+            color: #333;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e98997;
+        }
+        h3 {
+            color: #555;
+            margin: 1.5rem 0 0.75rem;
+        }
+        .status-good {
+            background: #d4edda;
+            padding: 1rem;
+            border-left: 4px solid #28a745;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .status-warning {
+            background: #fff3cd;
+            padding: 1rem;
+            border-left: 4px solid #ffc107;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .status-error {
+            background: #f8d7da;
+            padding: 1rem;
+            border-left: 4px solid #dc3545;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background: #e98997;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .flow-diagram {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .code-block {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .problem-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .solution-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .metric {
+            display: inline-block;
+            background: #e98997;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Brain Builders - Question System Analysis</h1>
+        <p><strong>Date:</strong> 2026-02-25 | <strong>Analysis by:</strong> Cipher (Engineering Agent)</p>
+
+        <h2>📊 Current Question Bank Status</h2>
+        
+        <div class="status-good">
+            <strong>✅ Question Bank Loaded Successfully</strong><br>
+            Total: 90 expert-reviewed questions deployed
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Total Questions</th>
+                    <th>Difficulty 1 (Easy)</th>
+                    <th>Difficulty 2 (Medium)</th>
+                    <th>Difficulty 3 (Hard)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>📖 Reading</td>
+                    <td><span class="metric">25</span></td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>🔢 Numeracy</td>
+                    <td><span class="metric">25</span></td>
+                    <td>7</td>
+                    <td>16</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>📝 Language Conventions</td>
+                    <td><span class="metric">25</span></td>
+                    <td>~8</td>
+                    <td>~14</td>
+                    <td>~3</td>
+                </tr>
+                <tr>
+                    <td>✍️ Writing</td>
+                    <td><span class="metric">15</span></td>
+                    <td>~5</td>
+                    <td>~8</td>
+                    <td>~2</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🔍 How the Question System Works</h2>
+
+        <h3>Session Flow</h3>
+        <div class="flow-diagram">
+User starts session
+    ↓
+QuestionAgent.reset() called
+    • Clears askedQuestionIds Set (prevents repeats)
+    • Sets difficulty = 1 (starts easy)
+    • Sets currentSubjectIndex = 0
+    ↓
+For each of 15 questions:
+    ↓
+┌─────────────────────────────────┐
+│ 1. Filter questions by:         │
+│    - Subject (if focused)       │
+│    - Year = 5                   │
+│    - Current difficulty level   │
+│    - NOT already asked          │
+└────────────┬────────────────────┘
+             │
+             ▼
+      ┌──────────────┐
+      │ Questions    │ ◄── Target: Use this pool
+      │ found?       │
+      └──┬────────┬──┘
+         │ YES    │ NO
+         │        │
+         │        ▼
+         │   ┌─────────────────────┐
+         │   │ Fallback 1:         │
+         │   │ Same subject + year │
+         │   │ ANY difficulty      │
+         │   └────┬────────────────┘
+         │        │ NO QUESTIONS
+         │        ▼
+         │   ┌─────────────────────┐
+         │   │ Fallback 2:         │
+         │   │ Same subject        │
+         │   │ ANY year            │
+         │   └────┬────────────────┘
+         │        │ NO QUESTIONS
+         │        ▼
+         │   ┌─────────────────────┐
+         │   │ 🚨 PROBLEM:         │
+         │   │ Clear asked list    │
+         │   │ START REPEATING     │
+         │   └─────────────────────┘
+         │
+         ▼
+    Show question
+    Add to "asked" list
+    User answers
+    Adjust difficulty:
+      • 2 correct in a row → difficulty++
+      • 1 wrong → difficulty--
+    ↓
+Next question (repeat 15 times)
+    ↓
+Session complete
+        </div>
+
+        <h2>🐛 Identified Problems</h2>
+
+        <div class="problem-box">
+            <h3>Problem #1: Difficulty 3 Bottleneck</h3>
+            <p><strong>Scenario:</strong> Student is performing well (getting most answers correct)</p>
+            <ul>
+                <li>After 2 correct answers in a row → difficulty increases to level 3</li>
+                <li>Reading difficulty 3: only <strong>3 questions</strong></li>
+                <li>Numeracy difficulty 3: only <strong>2 questions</strong></li>
+                <li>After exhausting these, system falls back to lower difficulties</li>
+                <li><strong>Issue:</strong> Limited hard questions creates repetitive feel for high performers</li>
+            </ul>
+        </div>
+
+        <div class="problem-box">
+            <h3>Problem #2: Browser Caching</h3>
+            <p><strong>Potential issue:</strong> Old JavaScript bundle cached in browser</p>
+            <ul>
+                <li>User's browser might be serving old 63-question version</li>
+                <li>New 90-question version deployed but not loaded</li>
+                <li><strong>Test:</strong> Hard refresh (Ctrl+Shift+R) to clear cache</li>
+            </ul>
+        </div>
+
+        <div class="problem-box">
+            <h3>Problem #3: Question Similarity</h3>
+            <p><strong>Perception issue:</strong> Different questions, same concept</p>
+            <ul>
+                <li>Example: "What is 3/8 + 2/8?" and "What is 5/12 + 3/12?"</li>
+                <li>Technically different questions, but same skill/pattern</li>
+                <li>May feel repetitive to the student</li>
+            </ul>
+        </div>
+
+        <h2>✅ Recommended Solutions</h2>
+
+        <div class="solution-box">
+            <h3>Immediate Fix #1: Add More Difficulty 3 Questions</h3>
+            <p>Generate 15-20 Band 8-level questions per subject</p>
+            <ul>
+                <li>Target: 20 difficulty 3 questions per subject</li>
+                <li>Ensures high performers don't exhaust hard questions</li>
+                <li>Maintains challenge throughout session</li>
+            </ul>
+        </div>
+
+        <div class="solution-box">
+            <h3>Immediate Fix #2: Better Difficulty Balance</h3>
+            <p>Adjust difficulty algorithm to be less aggressive</p>
+            <ul>
+                <li>Current: 2 correct → level up</li>
+                <li>Proposed: 3 correct → level up (more gradual)</li>
+                <li>Add maximum difficulty limit per session (e.g., cap at 2 for first 10 questions)</li>
+            </ul>
+        </div>
+
+        <div class="solution-box">
+            <h3>Immediate Fix #3: Question Variety Tracking</h3>
+            <p>Track question types to ensure variety</p>
+            <div class="code-block">
+// Track recently used question types
+recentQuestionTypes: []
+
+// When selecting question:
+// Prefer questions from different concept areas
+// Avoid: fractions → fractions → fractions
+// Better: fractions → geometry → place value
+            </div>
+        </div>
+
+        <div class="solution-box">
+            <h3>Long-term Solution: Expand Question Bank to 400+</h3>
+            <p>As originally planned in the NAPLAN prep system:</p>
+            <ul>
+                <li>Target: 200 questions per subject (800 total)</li>
+                <li>Allows true variety across sessions</li>
+                <li>Supports 23-day prep plan without repeats</li>
+            </ul>
+        </div>
+
+        <h2>🧪 Testing Plan</h2>
+
+        <h3>Test 1: Verify Deployed Version</h3>
+        <ol>
+            <li>Open Brain Builders in <strong>Incognito mode</strong> (no cache)</li>
+            <li>Open browser console (F12)</li>
+            <li>Type: <code>localStorage.clear()</code> (clear stored data)</li>
+            <li>Reload page</li>
+            <li>Enter app and check if repeats still occur</li>
+        </ol>
+
+        <h3>Test 2: Reproduce Repetition</h3>
+        <ol>
+            <li>Start a Reading session (15 questions)</li>
+            <li>Get most answers correct (trigger difficulty increase)</li>
+            <li>Note if questions repeat within the session</li>
+            <li>If yes: Document which question IDs repeat</li>
+        </ol>
+
+        <h3>Test 3: Check Question Bank in Console</h3>
+        <ol>
+            <li>Open browser console on Brain Builders</li>
+            <li>The QuestionAgent is a singleton, so we can inspect it</li>
+            <li>Check how many questions are actually loaded</li>
+        </ol>
+
+        <h2>📝 Next Steps</h2>
+
+        <ol>
+            <li><strong>Immediate:</strong> I'll add logging to track when questions repeat and why</li>
+            <li><strong>Short-term:</strong> Generate 15-20 more difficulty 3 questions per subject</li>
+            <li><strong>Medium-term:</strong> Implement question variety tracking</li>
+            <li><strong>Long-term:</strong> Expand to full 800-question bank as designed</li>
+        </ol>
+
+        <div class="status-warning">
+            <strong>⚠️ Action Required</strong><br>
+            Please test the app in incognito mode and let me know:
+            <ul style="margin-top: 0.5rem;">
+                <li>Does it still show repeated questions?</li>
+                <li>In what context (single subject vs mixed)?</li>
+                <li>Are they identical questions or similar concepts?</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>
