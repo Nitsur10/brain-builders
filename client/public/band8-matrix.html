@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAPLAN Band 8 Preparation Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 900;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #667eea;
+        }
+        h2 {
+            color: #333;
+            margin: 2.5rem 0 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        h3 {
+            color: #555;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+        }
+        .status-critical {
+            background: #fee;
+            padding: 1.5rem;
+            border-left: 6px solid #e74c3c;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .status-good {
+            background: #e8f8e8;
+            padding: 1.5rem;
+            border-left: 6px solid #27ae60;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        .status-action {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-left: 6px solid #f39c12;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .metric {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin: 0.25rem;
+        }
+        .metric-good {
+            background: #27ae60;
+            color: white;
+        }
+        .metric-warning {
+            background: #f39c12;
+            color: white;
+        }
+        .metric-critical {
+            background: #e74c3c;
+            color: white;
+        }
+        .metric-info {
+            background: #3498db;
+            color: white;
+        }
+        .section-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid #e0e0e0;
+        }
+        .section-card h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        .skill-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .skill-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .skill-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .gap-list li:before {
+            content: "✗";
+            color: #e74c3c;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 24px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: width 0.5s ease;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -2.6rem;
+            top: 0.3rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+        }
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 NAPLAN Band 8 Preparation Matrix</h1>
+        <div class="subtitle">
+            Comprehensive plan addressing repetition feedback & targeting Band 8 excellence
+        </div>
+
+        <div class="status-critical">
+            <strong>📌 Feedback Received:</strong> "Questions are repeating - it's distracting from learning"<br>
+            <strong>🎯 Goal:</strong> Band 8 across all 4 sections (11 March 2026 - 14 days remaining)<br>
+            <strong>✅ Action:</strong> Complete system redesign below
+        </div>
+
+        <h2>📊 Section 1: Current State Analysis</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Current Questions</th>
+                    <th>Diff 1</th>
+                    <th>Diff 2</th>
+                    <th>Diff 3 (Band 8)</th>
+                    <th>Gap Analysis</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>📖 Reading</td>
+                    <td><span class="metric metric-info">25</span></td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td><span class="metric metric-critical">3</span></td>
+                    <td>Need 17 more Band 8 questions</td>
+                    <td><span class="metric metric-critical">CRITICAL</span></td>
+                </tr>
+                <tr>
+                    <td>🔢 Numeracy</td>
+                    <td><span class="metric metric-info">25</span></td>
+                    <td>7</td>
+                    <td>16</td>
+                    <td><span class="metric metric-critical">2</span></td>
+                    <td>Need 18 more Band 8 questions</td>
+                    <td><span class="metric metric-critical">CRITICAL</span></td>
+                </tr>
+                <tr>
+                    <td>📝 Language</td>
+                    <td><span class="metric metric-info">25</span></td>
+                    <td>8</td>
+                    <td>14</td>
+                    <td><span class="metric metric-critical">3</span></td>
+                    <td>Need 17 more Band 8 questions</td>
+                    <td><span class="metric metric-critical">CRITICAL</span></td>
+                </tr>
+                <tr>
+                    <td>✍️ Writing</td>
+                    <td><span class="metric metric-warning">15</span></td>
+                    <td>5</td>
+                    <td>8</td>
+                    <td><span class="metric metric-critical">2</span></td>
+                    <td>Need 18 more Band 8 questions + prompts</td>
+                    <td><span class="metric metric-critical">CRITICAL</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="status-critical">
+            <strong>🚨 Root Cause:</strong> Only 10 Band 8 questions across ALL subjects (3+2+3+2)<br>
+            High performers exhaust these in 2-3 sessions → forced repeats → bad learning experience
+        </div>
+
+        <h2>🎯 Section 2: Band 8 Requirements Matrix</h2>
+
+        <div class="grid-2">
+            <div class="section-card">
+                <h4>📖 Reading - Band 8 Skills</h4>
+                <ul class="skill-list">
+                    <li>Interpret implied meaning from complex texts</li>
+                    <li>Understand sophisticated vocabulary in context</li>
+                    <li>Identify subtle author techniques</li>
+                    <li>Make connections across text parts</li>
+                    <li>Analyze text structure effects</li>
+                    <li>Evaluate information from various features</li>
+                    <li>Understand nuanced perspectives</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <strong>Target Questions:</strong> <span class="metric metric-critical">20 Band 8</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%">3/20 (15%)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h4>🔢 Numeracy - Band 8 Skills</h4>
+                <ul class="skill-list">
+                    <li>Multi-step word problems</li>
+                    <li>Complex fraction operations</li>
+                    <li>Advanced measurement (area, volume)</li>
+                    <li>Statistical reasoning (mean, median, mode)</li>
+                    <li>Algebraic thinking & patterns</li>
+                    <li>Geometric reasoning & proofs</li>
+                    <li>Real-world problem solving</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <strong>Target Questions:</strong> <span class="metric metric-critical">20 Band 8</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 10%">2/20 (10%)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h4>📝 Language - Band 8 Skills</h4>
+                <ul class="skill-list">
+                    <li>Complex punctuation (semicolons, dashes)</li>
+                    <li>Advanced grammar (subjunctive, complex tenses)</li>
+                    <li>Difficult spelling (silent letters, exceptions)</li>
+                    <li>Sentence structure variety</li>
+                    <li>Apostrophe mastery (possession, contraction)</li>
+                    <li>Subject-verb agreement (tricky cases)</li>
+                    <li>Vocabulary etymology</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <strong>Target Questions:</strong> <span class="metric metric-critical">20 Band 8</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%">3/20 (15%)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h4>✍️ Writing - Band 8 Skills</h4>
+                <ul class="skill-list">
+                    <li>Complex sentence structures</li>
+                    <li>Sophisticated vocabulary</li>
+                    <li>Cohesive devices & transitions</li>
+                    <li>Paragraph structure & topic sentences</li>
+                    <li>Persuasive techniques (evidence, counterargument)</li>
+                    <li>Narrative techniques (show don't tell)</li>
+                    <li>Audience awareness & tone</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <strong>Target Questions:</strong> <span class="metric metric-critical">20 Band 8</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 10%">2/20 (13%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>🛠️ Section 3: Solution Plan (Addressing Feedback)</h2>
+
+        <div class="status-action">
+            <strong>Feedback Integration:</strong> All solutions directly address the "repetition = distraction" problem
+        </div>
+
+        <h3>Strategy 1: Immediate Quality Over Quantity</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Impact</th>
+                    <th>Timeline</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Generate 70 new Band 8 questions</strong><br>(20 Reading, 20 Numeracy, 20 Language, 10 Writing)</td>
+                    <td>✅ Eliminates Band 8 bottleneck<br>✅ Supports 20+ sessions without repeats</td>
+                    <td>Today (4 hours)</td>
+                    <td><span class="metric metric-warning">READY TO START</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Expert review all new questions</strong><br>Using NAPLAN expert agent</td>
+                    <td>✅ Ensures quality<br>✅ Authentic NAPLAN style<br>✅ Band 8 appropriate</td>
+                    <td>Today (2 hours)</td>
+                    <td><span class="metric metric-warning">READY TO START</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Question variety tracking</strong><br>Avoid similar concepts back-to-back</td>
+                    <td>✅ Questions feel fresh<br>✅ Better learning experience</td>
+                    <td>Tomorrow (1 hour)</td>
+                    <td><span class="metric metric-info">PLANNED</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Slower difficulty progression</strong><br>3 correct → level up (vs 2)</td>
+                    <td>✅ More gradual challenge<br>✅ Less Band 8 exhaustion</td>
+                    <td>Today (30 min)</td>
+                    <td><span class="metric metric-warning">READY TO DEPLOY</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Strategy 2: Long-term Content Plan</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Milestone</th>
+                    <th>Question Count</th>
+                    <th>Timeline</th>
+                    <th>Benefits</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Phase 1</strong> (Current + 70 new)</td>
+                    <td>160 questions<br>(40 per subject)</td>
+                    <td>Complete by tonight</td>
+                    <td>✅ No repeats for 10+ sessions<br>✅ Supports 14-day prep plan</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 2</strong> (Expand coverage)</td>
+                    <td>320 questions<br>(80 per subject)</td>
+                    <td>By Mar 1 (4 days)</td>
+                    <td>✅ No repeats until test day<br>✅ Daily practice variety</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 3</strong> (Full bank as designed)</td>
+                    <td>800 questions<br>(200 per subject)</td>
+                    <td>Post-NAPLAN (learning resource)</td>
+                    <td>✅ True mastery tool<br>✅ Reusable for next year</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>📅 Section 4: 14-Day Countdown Plan</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h4>TODAY (Feb 25) - Question Bank Expansion</h4>
+                <ul>
+                    <li>Generate 70 Band 8 questions (4 hours)</li>
+                    <li>Expert review all questions (2 hours)</li>
+                    <li>Deploy slower difficulty progression (30 min)</li>
+                    <li><strong>Result:</strong> 160 total questions, 30 Band 8 per subject</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h4>Feb 26-27 - Variety & Quality</h4>
+                <ul>
+                    <li>Implement question variety tracking</li>
+                    <li>Add concept tagging (fractions, geometry, etc.)</li>
+                    <li>Test with Praptini: 2 sessions, verify no repeats</li>
+                    <li><strong>Result:</strong> Questions feel fresh and varied</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h4>Feb 28 - Mar 1 - Content Expansion</h4>
+                <ul>
+                    <li>Generate 160 more questions (320 total)</li>
+                    <li>Focus on weak areas identified in analytics</li>
+                    <li><strong>Result:</strong> No repeats possible until test day</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h4>Mar 2-10 - Practice & Fine-tune</h4>
+                <ul>
+                    <li>Daily practice sessions (15 questions/day)</li>
+                    <li>Monitor performance by skill area</li>
+                    <li>Add targeted questions for weak spots</li>
+                    <li><strong>Result:</strong> Confidence + Band 8 readiness</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h4>Mar 11 - NAPLAN Test Day 🎯</h4>
+                <ul>
+                    <li><strong>Target:</strong> Band 8 all sections</li>
+                    <li><strong>Preparation:</strong> 225 questions practiced (15/day × 15 days)</li>
+                    <li><strong>Variety:</strong> Zero repetition across all sessions</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>🎯 Section 5: Success Metrics</h2>
+
+        <div class="grid-2">
+            <div class="section-card">
+                <h4>Immediate Metrics (This Week)</h4>
+                <ul class="skill-list">
+                    <li>Zero question repeats in sessions</li>
+                    <li>30+ Band 8 questions per subject</li>
+                    <li>Variety score &gt; 90% (different concepts)</li>
+                    <li>Parent feedback: "No more complaints about repeats"</li>
+                </ul>
+            </div>
+
+            <div class="section-card">
+                <h4>Long-term Metrics (Test Day)</h4>
+                <ul class="skill-list">
+                    <li>Band 8 achievement (all 4 sections)</li>
+                    <li>225+ unique questions practiced</li>
+                    <li>Skill coverage: 100% of Band 8 requirements</li>
+                    <li>Confidence level: High</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>✅ Immediate Action Items</h2>
+
+        <div class="status-action">
+            <strong>🚀 Ready to Execute - Awaiting Your Approval:</strong>
+            <ol style="margin-top: 1rem; line-height: 2;">
+                <li><strong>NOW:</strong> Generate 70 Band 8 questions + expert review (6 hours total)</li>
+                <li><strong>TONIGHT:</strong> Deploy updated question bank (160 total)</li>
+                <li><strong>TOMORROW:</strong> Implement variety tracking</li>
+            </ol>
+        </div>
+
+        <div class="status-good">
+            <strong>📊 Expected Outcome:</strong><br>
+            By tomorrow night: <strong>No more repetition complaints</strong><br>
+            14 days from now: <strong>Band 8 achieved across all sections</strong> 🎯
+        </div>
+
+    </div>
+</body>
+</html>
